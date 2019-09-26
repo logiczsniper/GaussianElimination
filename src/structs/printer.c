@@ -13,7 +13,9 @@ void printMatrixCore(Matrix matrix)
         printf("\t{");
         for (int j = 0; j < COLUMN_COUNT; j++)
         {
-            printf("%d", matrix.values[i][j]);
+            float value = matrix.values[i][j];
+            printf("%6.2f", value);
+
             if (j != COLUMN_COUNT - 1)
             {
                 printf(", ");
@@ -38,7 +40,7 @@ void printRowCore(Row row)
 
     for (int i = 0; i < COLUMN_COUNT; i++)
     {
-        printf("%d", row[i]);
+        printf("%5.1f", row[i]);
         if (i != COLUMN_COUNT - 1)
         {
             printf(", ");

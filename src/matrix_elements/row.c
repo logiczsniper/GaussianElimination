@@ -1,1 +1,1 @@
-typedef int Row[COLUMN_COUNT];
+typedef float Row[COLUMN_COUNT];

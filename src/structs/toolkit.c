@@ -1,67 +1,54 @@
 typedef struct Toolkit
 {
-    int (*getZeroCount)(Row row);
-    int (*getLeadingZeroCount)(Row row);
-    bool (*zerosAtBottom)(Matrix matrix);
-    bool (*leadingZerosAtTop)(Matrix matrix);
+    int (*getZeroCount)(Row row, bool leading);
+    bool (*areZerosSorted)(Matrix matrix, bool leading);
     Tuple (*getPivotCoords)(Matrix matrix, int beyondRow);
 
 } Toolkit;
 
-int getZeroCountCore(Row row)
+int getZeroCountCore(Row row, bool leading)
 {
     int count = 0;
 
     for (int i = 0; i < COLUMN_COUNT; i++)
     {
-        if (row[i] == 0)
+        if (row[i] == 0.0F)
         {
             count++;
         }
-    }
-
-    return count;
-}
-
-int getLeadingZeroCountCore(Row row)
-{
-    int count = 0;
-
-    for (int i = 0; i < COLUMN_COUNT; i++)
-    {
-        if (row[i] == 0)
-        {
-            count++;
-        }
-        else
+        else if (leading)
         {
             break;
         }
     }
-
     return count;
 }
 
-bool leadingZerosAtTopCore(Matrix matrix)
+bool areZerosSortedCore(Matrix matrix, bool leading)
 {
-    int zeroCountOne = getLeadingZeroCountCore(matrix.values[0]);
-    int zeroCountTwo = getLeadingZeroCountCore(matrix.values[1]);
-    int zeroCountThree = getLeadingZeroCountCore(matrix.values[2]);
-    int zeroCountFour = getLeadingZeroCountCore(matrix.values[3]);
-    int zeroCountFive = getLeadingZeroCountCore(matrix.values[4]);
+    bool sorted = true;
 
-    return (zeroCountFive >= zeroCountFour && zeroCountFour >= zeroCountThree && zeroCountThree >= zeroCountTwo && zeroCountTwo >= zeroCountOne);
-}
+    for (int i = 1; i < ROW_COUNT; i++)
+    {
+        int currentRowZeroCount = getZeroCountCore(matrix.values[i], leading);
+        int previousRowZeroCount = getZeroCountCore(matrix.values[i - 1], leading);
 
-bool zerosAtBottomCore(Matrix matrix)
-{
-    int zeroCountOne = getZeroCountCore(matrix.values[0]);
-    int zeroCountTwo = getZeroCountCore(matrix.values[1]);
-    int zeroCountThree = getZeroCountCore(matrix.values[2]);
-    int zeroCountFour = getZeroCountCore(matrix.values[3]);
-    int zeroCountFive = getZeroCountCore(matrix.values[4]);
+        if (currentRowZeroCount < previousRowZeroCount)
+        {
+            // There are more zeros in the row above.
+            sorted = false;
+        }
+    }
 
-    return (zeroCountFive >= zeroCountFour && zeroCountFour >= zeroCountThree && zeroCountThree >= zeroCountTwo && zeroCountTwo >= zeroCountOne);
+    return sorted;
+
+    /*     int zeroCountOne = getZeroCountCore(matrix.values[0], leading);
+    int zeroCountTwo = getZeroCountCore(matrix.values[1], leading);
+    int zeroCountThree = getZeroCountCore(matrix.values[2], leading);
+    int zeroCountFour = getZeroCountCore(matrix.values[3], leading);
+    int zeroCountFive = getZeroCountCore(matrix.values[4], leading);
+
+    return (zeroCountFive >= zeroCountFour && zeroCountFour >= zeroCountThree && zeroCountThree >= zeroCountTwo && zeroCountTwo >= zeroCountOne); */
 }
 
 Tuple getPivotCoordsCore(Matrix matrix, int beyondRow)
@@ -72,7 +59,7 @@ Tuple getPivotCoordsCore(Matrix matrix, int beyondRow)
     {
         for (int j = 0; j < COLUMN_COUNT; j++)
         {
-            if (matrix.values[i][j] != 0 && i > beyondRow)
+            if (matrix.values[i][j] != 0.0F && i > beyondRow)
             {
                 pivotCoords = (Tuple){i, j};
                 return pivotCoords;
@@ -86,9 +73,7 @@ Toolkit buildToolkit()
 {
     Toolkit newToolkit = (Toolkit){
         .getZeroCount = getZeroCountCore,
-        .getLeadingZeroCount = getLeadingZeroCountCore,
-        .zerosAtBottom = zerosAtBottomCore,
-        .leadingZerosAtTop = leadingZerosAtTopCore,
+        .areZerosSorted = areZerosSortedCore,
         .getPivotCoords = getPivotCoordsCore};
 
     return newToolkit;

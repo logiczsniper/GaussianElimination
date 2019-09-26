@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <math.h>
 
 #define ROW_COUNT 5
 #define COLUMN_COUNT 10
@@ -26,18 +27,16 @@ void main()
      * to reduced row echelon form.
      **/
 
-    Matrix matrix = (Matrix){.values = {{4, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                        {8, 6, 2, 12, 0, 0, 4, 0, 0, 0},
-                                        {4, 2, 8, 6, 0, 0, 0, 14, 0, 0},
-                                        {0, 6, 4, 10, 8, 0, 0, 0, 0, 0},
-                                        {0, 0, 0, 0, 0, 0, 8, 0, 0, 0}}};
+    Matrix matrix = (Matrix){.values = {
+                                 {4, 6.4F, 8, 12, -4, -3, 5, 0, 4, 6},
+                                 {7, 6, 2, -12, 0, 0, 4, 2, 0, 0.6F},
+                                 {3, 2, 8, 6, 0, 0, 0, 14, 0, 0},
+                                 {0, 0, 0, 0, 7, 0, 0, 0, 0, 0},
+                                 {0, 6, 4, 10, 8, 0, 0, -1, 5, 0}}};
 
     // Build converter struct.
     Converter converter = buildConverter();
 
-    // Convert to Row Echelon Form (REF).
-    matrix = converter.toREF(matrix);
-
     // Convert to Reduced Row Echelon Form (RREF).
-    matrix = converter.toRREF(matrix);
+    matrix = converter.toREF(matrix);
 }
