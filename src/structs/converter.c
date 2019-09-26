@@ -3,8 +3,6 @@ typedef struct Converter
     Matrix (*toREF)(Matrix matrix);
 } Converter;
 
-Matrix sortByLeadingZero(Matrix matrix, Toolkit toolkit, Modifier modifier);
-
 Matrix toREFCore(Matrix initMatrix)
 {
 
@@ -63,7 +61,7 @@ Matrix toREFCore(Matrix initMatrix)
 
     // Now we must arrange the rows so that the number of leading 0s
     // increases as you go down the matrix (vertically).
-    matrix = sortByLeadingZero(matrix, toolkit, modifier);
+    matrix = toolkit.sortByLeadingZero(matrix, modifier);
 
     // Ensuring that the pivot coords move down one row each time.
     // As each time a pivot is found, the values below are turned to zeros,
@@ -113,37 +111,6 @@ Matrix toREFCore(Matrix initMatrix)
         }
         printer.printMatrix(matrix);
     }
-
-    // Run the leading zeros algorithm again
-    // Now we must arrange the rows so that the number of leading 0s
-    // increases as you go down the matrix (vertically).
-    matrix = sortByLeadingZero(matrix, toolkit, modifier);
-
-    printer.printMatrix(matrix);
-}
-
-Matrix sortByLeadingZero(Matrix matrix, Toolkit toolkit, Modifier modifier)
-{
-    while (!(toolkit.areZerosSorted(matrix, true)))
-    {
-        for (int i = 1; i < ROW_COUNT; i++)
-        {
-            Row row;
-            Row previousRow;
-
-            memcpy(row, matrix.values[i], sizeof(row));
-            memcpy(previousRow, matrix.values[i - 1], sizeof(previousRow));
-
-            if (toolkit.getZeroCount(row, true) < toolkit.getZeroCount(previousRow, true))
-            {
-                // If there are more leading zeros in the upper row (row) than there
-                // are in the lower row (previousRow), swap the rows.
-                matrix = modifier.swapRows(matrix, i, i - 1);
-            }
-        }
-    }
-
-    return matrix;
 }
 
 Converter buildConverter()

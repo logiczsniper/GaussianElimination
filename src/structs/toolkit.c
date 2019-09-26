@@ -3,6 +3,7 @@ typedef struct Toolkit
     int (*getZeroCount)(Row row, bool leading);
     bool (*areZerosSorted)(Matrix matrix, bool leading);
     Tuple (*getPivotCoords)(Matrix matrix, int beyondRow);
+    Matrix (*sortByLeadingZero)(Matrix matrix, Modifier modifier);
 
 } Toolkit;
 
@@ -41,14 +42,6 @@ bool areZerosSortedCore(Matrix matrix, bool leading)
     }
 
     return sorted;
-
-    /*     int zeroCountOne = getZeroCountCore(matrix.values[0], leading);
-    int zeroCountTwo = getZeroCountCore(matrix.values[1], leading);
-    int zeroCountThree = getZeroCountCore(matrix.values[2], leading);
-    int zeroCountFour = getZeroCountCore(matrix.values[3], leading);
-    int zeroCountFive = getZeroCountCore(matrix.values[4], leading);
-
-    return (zeroCountFive >= zeroCountFour && zeroCountFour >= zeroCountThree && zeroCountThree >= zeroCountTwo && zeroCountTwo >= zeroCountOne); */
 }
 
 Tuple getPivotCoordsCore(Matrix matrix, int beyondRow)
@@ -69,12 +62,37 @@ Tuple getPivotCoordsCore(Matrix matrix, int beyondRow)
     }
 }
 
+Matrix sortByLeadingZeroCore(Matrix matrix, Modifier modifier)
+{
+    while (!(areZerosSortedCore(matrix, true)))
+    {
+        for (int i = 1; i < ROW_COUNT; i++)
+        {
+            Row row;
+            Row previousRow;
+
+            memcpy(row, matrix.values[i], sizeof(row));
+            memcpy(previousRow, matrix.values[i - 1], sizeof(previousRow));
+
+            if (getZeroCountCore(row, true) < getZeroCountCore(previousRow, true))
+            {
+                // If there are more leading zeros in the upper row (row) than there
+                // are in the lower row (previousRow), swap the rows.
+                matrix = modifier.swapRows(matrix, i, i - 1);
+            }
+        }
+    }
+
+    return matrix;
+}
+
 Toolkit buildToolkit()
 {
     Toolkit newToolkit = (Toolkit){
         .getZeroCount = getZeroCountCore,
         .areZerosSorted = areZerosSortedCore,
-        .getPivotCoords = getPivotCoordsCore};
+        .getPivotCoords = getPivotCoordsCore,
+        .sortByLeadingZero = sortByLeadingZeroCore};
 
     return newToolkit;
 }

@@ -21,7 +21,7 @@ Matrix addRowsCore(Matrix matrix, int primaryRowNum, int secondaryRowNum, float 
         }
     }
 
-    printf("Matrix subtract: R%d -> R%d + R%d * %f\n", primaryRowNum, primaryRowNum, secondaryRowNum, multiple);
+    printf("Matrix add: R%d -> R%d + R%d * %f\n", primaryRowNum, primaryRowNum, secondaryRowNum, multiple);
     return matrix;
 }
 
