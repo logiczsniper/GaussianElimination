@@ -89,7 +89,7 @@ Matrix swapRowsCore(Matrix matrix, int primaryRowNum, int secondaryRowNum)
                 matrix.values[secondaryRowNum][i] = matrix.values[primaryRowNum][i];
                 matrix.values[primaryRowNum][i] = tempValue;
 
-                printf("Matrix swap C%d: R%d <-> R%d\n", primaryRowNum, secondaryRowNum);
+                printf("Matrix swap C%d: R%d <-> R%d\n", i, primaryRowNum, secondaryRowNum);
             }
         }
     }

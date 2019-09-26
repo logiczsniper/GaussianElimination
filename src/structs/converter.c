@@ -80,21 +80,27 @@ Matrix toREFCore(Matrix initMatrix)
             }
         }
     }
+
+    // Ensuring that the pivot coords move down one row each time.
+    // As each time a pivot is found, the values below are turned to zeros,
+    // there is no need to ensure the column is tracked. A zero value will never
+    // be picked as a pivot.
+    int beyondRow;
+    beyondRow = -1;
+
     for (int column = 0; column < COLUMN_COUNT; column++)
     {
-
-        int beyondRow, beyondColumn;
-        beyondRow = -1;
-        beyondColumn = -1;
-
         // Find the first number which will be made into the first pivot.
-        Tuple pivotCoords = toolkit.getPivotCoords(matrix, beyondRow, beyondColumn);
+        Tuple pivotCoords = toolkit.getPivotCoords(matrix, beyondRow);
 
         beyondRow++;
-        beyondColumn++;
 
-        // Divide the first row by the value of the pivot to make it 1.
-        matrix = modifier.divideConstant(matrix, pivotCoords.row, matrix.values[pivotCoords.row][pivotCoords.column]);
+        // Divide the first row by the value of the pivot to make it 1, if
+        // it is not already one.
+        if (matrix.values[pivotCoords.row][pivotCoords.column] != 1 && matrix.values[pivotCoords.row][pivotCoords.column] != 0)
+        {
+            matrix = modifier.divideConstant(matrix, pivotCoords.row, matrix.values[pivotCoords.row][pivotCoords.column]);
+        }
 
         printer.printMatrix(matrix);
 
@@ -128,10 +134,27 @@ Matrix toREFCore(Matrix initMatrix)
         printer.printMatrix(matrix);
     }
 
-    // Repeat step 2 but for c1 of rN, so c1 = [1, 0, 0, ... 0]
+    // Run the leading zeros algorithm again
+    // Now we must arrange the rows so that the number of leading 0s
+    // increases as you go down the matrix (vertically).
+    while (!(toolkit.leadingZerosAtTop(matrix)))
+    {
+        for (int i = 1; i < ROW_COUNT; i++)
+        {
+            Row row;
+            Row previousRow;
 
-    // Repeat previous steps for cN, but incrementing the first column each
-    // iteration so the pivot values
+            memcpy(row, matrix.values[i], sizeof(row));
+            memcpy(previousRow, matrix.values[i - 1], sizeof(previousRow));
+
+            if (toolkit.getLeadingZeroCount(row) < toolkit.getLeadingZeroCount(previousRow))
+            {
+                // If there are more leading zeros in the upper row (row) than there
+                // are in the lower row (previousRow), swap the rows.
+                matrix = modifier.swapRows(matrix, i, i - 1);
+            }
+        }
+    }
 }
 
 Matrix toRREFCore(Matrix matrix)

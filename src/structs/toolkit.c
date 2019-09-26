@@ -4,7 +4,7 @@ typedef struct Toolkit
     int (*getLeadingZeroCount)(Row row);
     bool (*zerosAtBottom)(Matrix matrix);
     bool (*leadingZerosAtTop)(Matrix matrix);
-    Tuple (*getPivotCoords)(Matrix matrix, int beyondRow, int beyondColumn);
+    Tuple (*getPivotCoords)(Matrix matrix, int beyondRow);
 
 } Toolkit;
 
@@ -64,7 +64,7 @@ bool zerosAtBottomCore(Matrix matrix)
     return (zeroCountFive >= zeroCountFour && zeroCountFour >= zeroCountThree && zeroCountThree >= zeroCountTwo && zeroCountTwo >= zeroCountOne);
 }
 
-Tuple getPivotCoordsCore(Matrix matrix, int beyondRow, int beyondColumn)
+Tuple getPivotCoordsCore(Matrix matrix, int beyondRow)
 {
     Tuple pivotCoords;
 
@@ -72,17 +72,14 @@ Tuple getPivotCoordsCore(Matrix matrix, int beyondRow, int beyondColumn)
     {
         for (int j = 0; j < COLUMN_COUNT; j++)
         {
-            if (matrix.values[i][j] != 0 && i < beyondRow && j < beyondColumn)
+            if (matrix.values[i][j] != 0 && i > beyondRow)
             {
                 pivotCoords = (Tuple){i, j};
-                printf("Pivot coords found:\nR%d - C%d", i, j);
-                break;
+                return pivotCoords;
+                printf("Pivot coords found:\nR%d - C%d\n", i, j);
             }
         }
-        break;
     }
-
-    return pivotCoords;
 }
 
 Toolkit buildToolkit()
