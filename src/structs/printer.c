@@ -1,3 +1,7 @@
+/**
+ * @brief  Responsible to display the matrix and its elements to the user.
+ * @retval None
+ */
 typedef struct Printer
 {
     void (*printMatrix)(Matrix matrix);
@@ -5,6 +9,12 @@ typedef struct Printer
 
 } Printer;
 
+/**
+ * @brief  prints out an entire matrix with padding on each element.
+ * @note   rows are tabbed over. Also shows curly braces.
+ * @param  matrix: the matrix to be represented.
+ * @retval None
+ */
 void printMatrixCore(Matrix matrix)
 {
     printf("{\n");
@@ -34,6 +44,12 @@ void printMatrixCore(Matrix matrix)
     printf("}\n\n");
 }
 
+/**
+ * @brief  for printing out only a single row in the matrix.
+ * @note   One unit less padding than the previous method.
+ * @param  row: the row struct to be represented.
+ * @retval None
+ */
 void printRowCore(Row row)
 {
     printf("{");

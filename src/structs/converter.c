@@ -1,11 +1,21 @@
+/**
+ * @brief  responsible for converting the input matrix.
+ * @retval None
+ */
 typedef struct Converter
 {
-    Matrix (*toREF)(Matrix matrix);
+    Matrix (*toRREF)(Matrix matrix);
 } Converter;
 
-Matrix toREFCore(Matrix initMatrix)
+/**
+ * @brief  takes a matrix, by Gaussian elimination, converts it to reduced row echelon form.
+ * @note   the matrix must have the size specified by ROW_COUNT and COLUMN_COUNT
+ * @see    main.c
+ * @param  initMatrix: the matrix created in main to be converted.
+ * @retval the initMatrix in RREF.
+ */
+Matrix toRREFCore(Matrix initMatrix)
 {
-
     // Create supporting structs.
     Modifier modifier = buildModifier();
     Printer printer = buildPrinter();
@@ -39,7 +49,6 @@ Matrix toREFCore(Matrix initMatrix)
     // zeros are at the top.
     // Start i = 1 as we need to take rows two at a time;
     // if i = 0 we cannot get the previous row to compare it.
-
     while (!(toolkit.areZerosSorted(matrix, false)))
     {
         for (int i = 1; i < ROW_COUNT; i++)
@@ -74,6 +83,7 @@ Matrix toREFCore(Matrix initMatrix)
         // Find the first number which will be made into the first pivot.
         Tuple pivotCoords = toolkit.getPivotCoords(matrix, beyondRow);
 
+        // The next pivot found must be atleast one row further down.
         beyondRow++;
 
         // Divide the first row by the value of the pivot to make it 1, if
@@ -116,7 +126,7 @@ Matrix toREFCore(Matrix initMatrix)
 Converter buildConverter()
 {
     Converter newConverter = (Converter){
-        .toREF = toREFCore};
+        .toRREF = toRREFCore};
 
     return newConverter;
 }

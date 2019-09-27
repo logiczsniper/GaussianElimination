@@ -38,5 +38,5 @@ void main()
     Converter converter = buildConverter();
 
     // Convert to Reduced Row Echelon Form (RREF).
-    matrix = converter.toREF(matrix);
+    matrix = converter.toRREF(matrix);
 }

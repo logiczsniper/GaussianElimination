@@ -1,3 +1,8 @@
+/**
+ * @brief  responsible for modifying the matrix.
+ * @note   completes the elementary row operations.
+ * @retval None
+ */
 typedef struct Modifier
 {
     Matrix (*addRows)(Matrix matrix, int primaryRowNum, int secondaryRowNum, float multiple);
@@ -8,6 +13,15 @@ typedef struct Modifier
 
 } Modifier;
 
+/**
+ * @brief  adds a multiple of a secondary row to a primary row.
+ * @note   multiple should not be 0.
+ * @param  matrix: the matrix where the rows are to be found.
+ * @param  primaryRowNum: the row which the operation will by applied to.
+ * @param  secondaryRowNum: the row which will be multiplied by the multiple and then added to the primary row.
+ * @param  multiple: the value to multiply with the secondary row. Should be equal to the value you want to make a 0.
+ * @retval Matrix with the operation completed.
+ */
 Matrix addRowsCore(Matrix matrix, int primaryRowNum, int secondaryRowNum, float multiple)
 {
     for (int j = 0; j < ROW_COUNT; j++)
@@ -25,6 +39,15 @@ Matrix addRowsCore(Matrix matrix, int primaryRowNum, int secondaryRowNum, float 
     return matrix;
 }
 
+/**
+ * @brief  subtracts a multiple of a secondary row to a primary row.
+ * @note   multiple should not be 0.
+ * @param  matrix: the matrix where the rows are to be found.
+ * @param  primaryRowNum: the row which the operation will by applied to.
+ * @param  secondaryRowNum: the row which will be multiplied by the multiple and then subtracrted from the primary row.
+ * @param  multiple: the value to multiply with the secondary row. Should be equal to the value you want to make a 0.
+ * @retval Matrix with the operation completed.
+ */
 Matrix subtractRowsCore(Matrix matrix, int primaryRowNum, int secondaryRowNum, float multiple)
 {
     {
@@ -43,6 +66,14 @@ Matrix subtractRowsCore(Matrix matrix, int primaryRowNum, int secondaryRowNum, f
     }
 }
 
+/**
+ * @brief  multiplies a row by a non zero constant.
+ * @note   constant cannot equal 0.
+ * @param  matrix: the matrix where the row is found.
+ * @param  rowNum: the index of the row which the operation will be completed on.
+ * @param  multiple: the number to multiply in.
+ * @retval Matrix with operation completed.
+ */
 Matrix multiplyConstantCore(Matrix matrix, int rowNum, float multiple)
 {
     for (int i = 0; i < ROW_COUNT; i++)
@@ -59,6 +90,14 @@ Matrix multiplyConstantCore(Matrix matrix, int rowNum, float multiple)
     return matrix;
 }
 
+/**
+ * @brief  divides a row by a non zero constant.
+ * @note   constant cannot equal 0.
+ * @param  matrix: the matrix where the row is found.
+ * @param  rowNum: the index of the row which the operation will be completed on.
+ * @param  multiple: the number to divide in.
+ * @retval Matrix with operation completed.
+ */
 Matrix divideConstantCore(Matrix matrix, int rowNum, float dividend)
 {
     for (int i = 0; i < ROW_COUNT; i++)
@@ -76,6 +115,13 @@ Matrix divideConstantCore(Matrix matrix, int rowNum, float dividend)
     return matrix;
 }
 
+/**
+ * @brief  swaps the position of two rows in the matrix.
+ * @param  matrix: the matrix where the rows are found.
+ * @param  primaryRowNum: the first row index.
+ * @param  secondaryRowNum: the second row index.
+ * @retval Matrix with the rows found at the aforementioned indices swapped.
+ */
 Matrix swapRowsCore(Matrix matrix, int primaryRowNum, int secondaryRowNum)
 {
     for (int j = 0; j < ROW_COUNT; j++)
