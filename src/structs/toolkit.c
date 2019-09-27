@@ -1,3 +1,7 @@
+/**
+ * @brief  Holds misc. functions used in the conversion.
+ * @retval None
+ */
 typedef struct Toolkit
 {
     int (*getZeroCount)(Row row, bool leading);
@@ -7,6 +11,13 @@ typedef struct Toolkit
 
 } Toolkit;
 
+/**
+ * @brief  counts number of zeros in a row.
+ * @note   output depends on value of leading parameter.
+ * @param  row: the row which contains the zeros to be counted.
+ * @param  leading: if true, will stop counting when a non zero value is found.
+ * @retval count: number of 0s (leading or non leading based on param leading).
+ */
 int getZeroCountCore(Row row, bool leading)
 {
     int count = 0;
@@ -25,6 +36,13 @@ int getZeroCountCore(Row row, bool leading)
     return count;
 }
 
+/**
+ * @brief  checks if the amount of zeros (or leading zeros) increases as you go down the matrix.
+ * @note   depends on parameter leading.
+ * @param  matrix: the matrix to assert.
+ * @param  leading: if true, checks that the leading zeros are sorted instead of all zeros.
+ * @retval bool sorted: is the zeros in the correct orientation in the matrix.
+ */
 bool areZerosSortedCore(Matrix matrix, bool leading)
 {
     bool sorted = true;
@@ -44,6 +62,13 @@ bool areZerosSortedCore(Matrix matrix, bool leading)
     return sorted;
 }
 
+/**
+ * @brief  get the coordinates of a leading pivot (to be).
+ * @param  matrix: contains the pivot options.
+ * @param  beyondRow: the row of the selected pivot CANNOT be less than this value.
+ *                    this ensures that the leading pivot moves over one row each time.
+ * @retval Tuple coords of the pivot located.
+ */
 Tuple getPivotCoordsCore(Matrix matrix, int beyondRow)
 {
     Tuple pivotCoords;
@@ -62,6 +87,13 @@ Tuple getPivotCoordsCore(Matrix matrix, int beyondRow)
     }
 }
 
+/**
+ * @brief  sorts the matrix based on the number of leading zeros in each row.
+ * @note   requires use of the modifier.
+ * @param  matrix: the matrix to be sorted.
+ * @param  modifier: an initialised modifier struct.
+ * @retval the sorted Matrix.
+ */
 Matrix sortByLeadingZeroCore(Matrix matrix, Modifier modifier)
 {
     while (!(areZerosSortedCore(matrix, true)))
